@@ -552,7 +552,8 @@ export function useAllStakingAPRs(stakeAmount: string = '1000') {
           estimatedAPRs: estimatedAPRs.map(apr => apr.toString()),
           maxAPRs: maxAPRs.map(apr => apr.toString())
         });
-        
+        //  flexable 灵活质押 
+        estimatedAPRs[4] = estimatedAPRs[0] / BigInt(2);
         setData({
           estimatedAPRs,
           maxAPRs,
