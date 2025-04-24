@@ -50,3 +50,8 @@ export interface APRInfo {
     maxApr: bigint;
 }
 
+export interface MintVeHSKInfo {
+    mintedTotal: bigint; // 铸造的总数量
+    flexibleStakeCount: bigint;
+    lockedStakeCount: bigint;
+}

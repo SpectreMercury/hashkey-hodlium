@@ -13,6 +13,7 @@ import axios from 'axios';
 import Image from 'next/image';
 import AddressBar from '@/components/AddressBar';
 import StartStake from '@/components/app/StartStake';
+import Mint from '@/components/app/Mint';
 
 export default function Home() {
   // 添加本地loading状态，初始为true
@@ -345,9 +346,11 @@ export default function Home() {
             <p className="text-xl text-slate-300 max-w-3xl mx-auto">
               Securely stake your HSK tokens and earn passive income with competitive APR
             </p>
-            
-            {/* Call to action button */}
-            <StartStake />
+            <div className="flex justify-center items-center gap-4 mt-10">
+              {/* Call to action button */}
+              <StartStake />
+              <Mint/>
+            </div>
             {/* <div className="mt-10">
               <Link 
                 href="/stake" 
