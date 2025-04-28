@@ -55,3 +55,11 @@ export interface MintVeHSKInfo {
     flexibleStakeCount: bigint;
     lockedStakeCount: bigint;
 }
+
+export interface MintableAmountInfo {
+    mintableTotal: bigint;       // 总可铸造数量
+    flexibleMintable: bigint;    // 来自灵活质押的可铸造量
+    lockedMintable: bigint;      // 来自锁定质押的可铸造量
+    flexibleStakeCount: bigint;  // 灵活质押数量
+    lockedStakeCount: bigint;    // 锁定质押数量
+}

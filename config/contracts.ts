@@ -1,7 +1,7 @@
 export const contractAddresses = {
     133: {
       stakingOldContract: '0x6b126ad5F9Cd3CeD2A7A8CEB5153d475BeE574c4' as `0x${string}`,
-      stakingContract: '0x379E8aa94BAbAC453F170E98355C6fE14CbA8e31' as `0x${string}`,
+      stakingContract: '0xe41844eAFfD946b138E133E73f55bB9dd98FEa96' as `0x${string}`,
       stHSKToken: '0x' as `0x${string}`,
       veHSKContract: '0xbfDA9cb158CC994e3Af5eE0F006F76126e5c9257',
     },

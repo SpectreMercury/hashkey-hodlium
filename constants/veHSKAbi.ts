@@ -1,5 +1,10 @@
 export const VeHSKABI = [
   {
+    "type": "constructor",
+    "inputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
     "type": "function",
     "name": "UPGRADE_INTERFACE_VERSION",
     "inputs": [],
@@ -11,6 +16,19 @@ export const VeHSKABI = [
       }
     ],
     "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "addToWhitelist",
+    "inputs": [
+      {
+        "name": "account",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
   },
   {
     "type": "function",
@@ -105,6 +123,19 @@ export const VeHSKABI = [
   },
   {
     "type": "function",
+    "name": "batchAddToWhitelist",
+    "inputs": [
+      {
+        "name": "accounts",
+        "type": "address[]",
+        "internalType": "address[]"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "decimals",
     "inputs": [],
     "outputs": [
@@ -124,6 +155,24 @@ export const VeHSKABI = [
         "name": "delegatee",
         "type": "address",
         "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "directMint",
+    "inputs": [
+      {
+        "name": "to",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
     "outputs": [],
@@ -211,6 +260,45 @@ export const VeHSKABI = [
   },
   {
     "type": "function",
+    "name": "getMintableAmount",
+    "inputs": [
+      {
+        "name": "user",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "mintableTotal",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "flexibleMintable",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "lockedMintable",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "flexibleStakeCount",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "lockedStakeCount",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "getMintedAmount",
     "inputs": [
       {
@@ -269,6 +357,25 @@ export const VeHSKABI = [
     ],
     "outputs": [],
     "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "isWhitelisted",
+    "inputs": [
+      {
+        "name": "account",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
   },
   {
     "type": "function",
@@ -333,12 +440,12 @@ export const VeHSKABI = [
         "internalType": "uint256"
       },
       {
-        "name": "flexibleStakeCount",
+        "name": "flexibleCount",
         "type": "uint256",
         "internalType": "uint256"
       },
       {
-        "name": "lockedStakeCount",
+        "name": "lockedCount",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -409,6 +516,19 @@ export const VeHSKABI = [
       }
     ],
     "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "removeFromWhitelist",
+    "inputs": [
+      {
+        "name": "account",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
   },
   {
     "type": "function",
@@ -645,6 +765,45 @@ export const VeHSKABI = [
     "stateMutability": "payable"
   },
   {
+    "type": "function",
+    "name": "whitelistMint",
+    "inputs": [
+      {
+        "name": "amount",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "event",
+    "name": "AddressRemovedFromWhitelist",
+    "inputs": [
+      {
+        "name": "account",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "AddressWhitelisted",
+    "inputs": [
+      {
+        "name": "account",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
     "type": "event",
     "name": "Approval",
     "inputs": [
@@ -684,6 +843,25 @@ export const VeHSKABI = [
         "type": "address",
         "indexed": true,
         "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "DirectMint",
+    "inputs": [
+      {
+        "name": "to",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
       }
     ],
     "anonymous": false
@@ -912,4 +1090,4 @@ export const VeHSKABI = [
       }
     ]
   }
-];
+] as const;

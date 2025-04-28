@@ -1,11 +1,12 @@
 'use client';
 
-import { useChainId, usePublicClient, useWalletClient, useSwitchChain, useConfig } from 'wagmi';
+import { useChainId, usePublicClient, useWalletClient, useSwitchChain, useConfig, useAccount } from 'wagmi';
 import { getContractAddresses } from '@/config/contracts';
 import { VeHSKABI } from '@/constants/veHSKAbi';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Address, TransactionReceipt, UserRejectedRequestError } from 'viem';
 import { writeContract, waitForTransactionReceipt } from '@wagmi/core';
+import { MintableAmountInfo } from '@/types/contracts';
 
 export function useMintVeHSK() {
   const chainId = useChainId();
@@ -93,3 +94,70 @@ export function useMintVeHSK() {
     txHash,
   };
 }
+
+export function useMintableAmount() {
+  const { address } = useAccount();
+  const chainId = useChainId();
+  const publicClient = usePublicClient();
+  
+  const [data, setData] = useState<{
+    mintableAmount: MintableAmountInfo | null;
+    isLoading: boolean;
+    error: Error | null;
+  }>({
+    mintableAmount: null,
+    isLoading: false,
+    error: null,
+  });
+
+  useEffect(() => {
+    const fetchMintableAmount = async () => {
+      if (!address || !publicClient) {
+        setData(prev => ({ ...prev, isLoading: false }));
+        return;
+      }
+
+      setData(prev => ({ ...prev, isLoading: true, error: null }));
+      try {
+        const contractAddress = getContractAddresses(chainId).veHSKContract;
+        
+        const mintableInfo = await publicClient.readContract({
+          address: contractAddress as `0x${string}`,
+          abi: VeHSKABI,
+          functionName: 'getMintableAmount',
+          args: [address],
+        }) as [bigint, bigint, bigint, bigint, bigint];
+        
+        setData({
+          mintableAmount: {
+            mintableTotal: mintableInfo[0],
+            flexibleMintable: mintableInfo[1],
+            lockedMintable: mintableInfo[2],
+            flexibleStakeCount: mintableInfo[3],
+            lockedStakeCount: mintableInfo[4],
+          },
+          isLoading: false,
+          error: null,
+        });
+      } catch (error) {
+        console.error('获取可铸造数量失败:', error);
+        setData(prev => ({
+          ...prev,
+          isLoading: false,
+          error: error instanceof Error ? error : new Error('获取可铸造数量失败'),
+        }));
+      }
+    };
+
+    fetchMintableAmount();
+    
+    // 每 5 分钟自动刷新一次
+    const intervalId = setInterval(fetchMintableAmount, 300000); 
+    
+    // 清除定时器
+    return () => clearInterval(intervalId);
+  }, [address, chainId, publicClient]);
+
+  return data;
+}
+
