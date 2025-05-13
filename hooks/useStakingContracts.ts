@@ -319,11 +319,11 @@ export function useUnstakeLocked() {
 }
 
 // 获取锁定质押信息
-export function useLockedStakeInfo(stakeId: number | null) {
+export function useLockedStakeInfo(address: `0x${string}`, stakeId: number | null) {
   const chainId = useChainId();
   const contractAddress = getContractAddresses(chainId).stakingContract;
   const publicClient = usePublicClient();
-  const { address } = useAccount();
+  // const { address } = useAccount();
   
   const [data, setData] = useState<{
     sharesAmount: bigint;

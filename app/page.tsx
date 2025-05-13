@@ -6,13 +6,14 @@ import { StakeType } from '@/types/contracts';
 import { formatBigInt } from '@/utils/format';
 import { useAccount } from 'wagmi';
 import Link from 'next/link';
-import { useStakingInfo, useAllStakingAPRs } from '@/hooks/useStakingContracts';
+import { useStakingInfo, useAllStakingAPRs, useLockedStakeInfo } from '@/hooks/useStakingContracts';
 import { useOldStakingInfo } from '@/hooks/useOldStakingContracts';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import Image from 'next/image';
 import AddressBar from '@/components/AddressBar';
 import StartStake from '@/components/app/StartStake';
+import UnstakeExporterComponent from '@/components/UnstakeReward';
 
 export default function Home() {
   // 添加本地loading状态，初始为true
@@ -21,6 +22,7 @@ export default function Home() {
   const [debouncedAmount, setDebouncedAmount] = useState(simulatedAmount);
   const { address: _address, isConnected } = useAccount();
   const { totalStaked, stakingStats, exchangeRate, isLoading: apiLoading } = useStakingInfo(debouncedAmount);
+
   const { totalStaked: oldTotalStaked, isLoading: oldApiLoading } = useOldStakingInfo(debouncedAmount);
   const { estimatedAPRs, maxAPRs, isLoading: aprsLoading } = useAllStakingAPRs(debouncedAmount);
   const router = useRouter();
@@ -348,6 +350,7 @@ export default function Home() {
             
             {/* Call to action button */}
             <StartStake />
+            <UnstakeExporterComponent />
             {/* <div className="mt-10">
               <Link 
                 href="/stake" 
