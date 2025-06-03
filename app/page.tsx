@@ -271,54 +271,6 @@ export default function Home() {
     );
   }
   
-  // 未发布或应用未启用：显示倒计时
-  if (!isLaunched || !isAppEnabled) {
-    // 显示不同的消息，取决于是时间未到还是应用未启用
-    const message = "Launching on March 3, 2025 20:00 UTC+8"
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 to-black text-white">
-        <div className="container mx-auto px-4 py-8 max-w-4xl text-center">
-          
-          <h1 className="text-5xl md:text-7xl font-bold pb-8 bg-gradient-to-r from-cyan-400 to-primary bg-clip-text text-transparent">
-            HSK Staking
-          </h1>
-          
-          <p className="text-lg md:text-2xl mb-10 text-gray-300">
-            Get ready for the future of staking. Launching soon.
-          </p>
-          
-          {!isLaunched && (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 text-center mb-10 md:mb-16 max-w-md md:max-w-2xl mx-auto">
-              <div className="bg-gray-800/50 backdrop-blur-md p-4 md:p-6 rounded-xl border border-gray-700 shadow-lg">
-                <div className="text-5xl md:text-6xl font-bold text-primary">{timeLeft.days}</div>
-                <div className="text-xs md:text-sm uppercase tracking-wider mt-1 md:mt-2 text-gray-400">Days</div>
-              </div>
-              
-              <div className="bg-gray-800/50 backdrop-blur-md p-4 md:p-6 rounded-xl border border-gray-700 shadow-lg">
-                <div className="text-5xl md:text-6xl font-bold text-primary">{timeLeft.hours}</div>
-                <div className="text-xs md:text-sm uppercase tracking-wider mt-1 md:mt-2 text-gray-400">Hours</div>
-              </div>
-              
-              <div className="bg-gray-800/50 backdrop-blur-md p-4 md:p-6 rounded-xl border border-gray-700 shadow-lg">
-                <div className="text-5xl md:text-6xl font-bold text-primary">{timeLeft.minutes}</div>
-                <div className="text-xs md:text-sm uppercase tracking-wider mt-1 md:mt-2 text-gray-400">Minutes</div>
-              </div>
-              
-              <div className="bg-gray-800/50 backdrop-blur-md p-4 md:p-6 rounded-xl border border-gray-700 shadow-lg">
-                <div className="text-5xl md:text-6xl font-bold text-primary">{timeLeft.seconds}</div>
-                <div className="text-xs md:text-sm uppercase tracking-wider mt-1 md:mt-2 text-gray-400">Seconds</div>
-              </div>
-            </div>
-          )}
-          
-          <div className="text-base md:text-lg text-gray-400">
-            {message}
-          </div>
-        </div>
-      </div>
-    );
-  }
-  
   // 在首页的合适位置添加数据来源指示器
   const renderDataSourceIndicator = () => {
     return (

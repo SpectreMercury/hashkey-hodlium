@@ -4,8 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { useUnstakeRewardExporter } from '@/hooks/useUnstakeRewardExporter';
 import type { UnstakeEvent, RequestUnstakeFlexibleEvent } from '@/hooks/useContractEvents';
 // Import both JSON data files
-import unstakeData from '@/hooks/unstake-events-3319640-5882600.json';
-import requestUnstakeFlexibleData from '@/hooks/request-unstake-flexible-events-3319640-5882600.json';
+import unstakeData from '@/hooks/unstake-events-5882600-7285343.json';
+import requestUnstakeFlexibleData from '@/hooks/request-unstake-flexible-events-5882600-7285343.json';
 
 function UnstakeExporterComponent() {
     // Assuming unstakeData is the imported JSON array conforming to UnstakeEvent[]
@@ -21,7 +21,7 @@ function UnstakeExporterComponent() {
             ...event,
             // sharesAmount: BigInt(event.sharesAmount),
             hskAmount: BigInt(event.hskAmount),
-            penalty: BigInt(event.penalty),
+            penalty: BigInt(event.penalty || 0),
             stakeId: BigInt(event.stakeId),
             blockNumber: BigInt(event.blockNumber),
             // Ensure boolean is parsed correctly if needed
@@ -34,7 +34,7 @@ function UnstakeExporterComponent() {
             ...event,
             stakeId: BigInt(event.stakeId),
             hskAmount: BigInt(event.hskAmount),
-            claimableBlock: BigInt(event.claimableBlock),
+            claimableBlock: BigInt(event.claimableBlock || 0),
             blockNumber: BigInt(event.blockNumber),
         }));
         setFlexibleEventsToExport(parsedFlexibleEvents);

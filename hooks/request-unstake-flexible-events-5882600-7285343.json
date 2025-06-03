@@ -1,0 +1,79 @@
+[
+  {
+    "user": "0xba68E02BE3850260eDCBdd8C36EaAeEa9E4b4E56",
+    "stakeId": "1",
+    "hskAmount": "15805389926452370932088",
+    "blockNumber": "7038634",
+    "transactionHash": "0xdc52619f65a9d6e497fa03231982362c2ade3f64e328a0828d0641381b1ebe96"
+  },
+  {
+    "user": "0xba68E02BE3850260eDCBdd8C36EaAeEa9E4b4E56",
+    "stakeId": "0",
+    "hskAmount": "14805344999000000018184",
+    "blockNumber": "7038577",
+    "transactionHash": "0x021e5291e76d9888d30f2ea652242bf15d14db3bd2d7b222cca7822936e3ceb3"
+  },
+  {
+    "user": "0xE1E9Ea7c579B6869E89D206252fd4B57E506a4bF",
+    "stakeId": "1",
+    "hskAmount": "5906137241827415050039",
+    "blockNumber": "6763923",
+    "transactionHash": "0x094a6de7f1e35f1524dcc0d025af61731ed48b812517efb6bcb9d9a04fe98172"
+  },
+  {
+    "user": "0xE1E9Ea7c579B6869E89D206252fd4B57E506a4bF",
+    "stakeId": "0",
+    "hskAmount": "199999999999999999999",
+    "blockNumber": "6747408",
+    "transactionHash": "0x62bed9c7923be81340d137b33e951ba9c1a42acdc7548881ffefca0a495b2594"
+  },
+  {
+    "user": "0x6a8066F1E7431b5526A7138A993036be5defd20D",
+    "stakeId": "0",
+    "hskAmount": "138611137291789103399",
+    "blockNumber": "6682553",
+    "transactionHash": "0x350533b9e819834c3d36f25c3bef8eaf35b5cd3e74ab27bbb0591894fac5050f"
+  },
+  {
+    "user": "0x690e802d7BF49aCC6717CE1B7126bCE6f37285b8",
+    "stakeId": "0",
+    "hskAmount": "300160945080876729518",
+    "blockNumber": "6519176",
+    "transactionHash": "0x9f57e15fdebadf1c86ab4bbc6a78a1ddf7fbd4b485152429fe8eafd08be9e76a"
+  },
+  {
+    "user": "0xBF340dd5De74D16B7C7e11F0B55d3b2322b36790",
+    "stakeId": "1",
+    "hskAmount": "14954000000000000000000",
+    "blockNumber": "6511326",
+    "transactionHash": "0x99d44e5dd6fbe4f8bc4cf3a02a86869273cfd123481f5689e77b4bc6b48e60de"
+  },
+  {
+    "user": "0xBF340dd5De74D16B7C7e11F0B55d3b2322b36790",
+    "stakeId": "0",
+    "hskAmount": "31163000000000000000000",
+    "blockNumber": "6511301",
+    "transactionHash": "0x84ec2eca9ab99ac66b9d4d92bf3a89b9933ba4c36fa93624af35dd0bbba3b5b6"
+  },
+  {
+    "user": "0x0e3381356044241caf2130d9d3Af0A66bf5F6F0f",
+    "stakeId": "0",
+    "hskAmount": "100000000000000000000",
+    "blockNumber": "6377178",
+    "transactionHash": "0x90296009c1c0c63e8f695126466f6b5779db064faccf52afb9851c4e364ee22a"
+  },
+  {
+    "user": "0x43830c7c51E734089e732A72fEAf6ff8e0605430",
+    "stakeId": "0",
+    "hskAmount": "399962523398077908440",
+    "blockNumber": "6092991",
+    "transactionHash": "0x785be8a96c15c8b187b4d22a00badcee15f60687f103d29b15db7c847beaa485"
+  },
+  {
+    "user": "0xDE23A07E40B1C698C8De916dCC878A4d35828903",
+    "stakeId": "0",
+    "hskAmount": "274999999999999999999",
+    "blockNumber": "5899395",
+    "transactionHash": "0xb4a99fe06050f579aeb04a38860fab33bdafcb75027a40e1a510144fe27b1bf3"
+  }
+]
