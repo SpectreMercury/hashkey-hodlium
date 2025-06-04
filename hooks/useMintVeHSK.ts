@@ -26,11 +26,10 @@ export function useMintVeHSK() {
       setIsPending(true);
       setError(null);
       setTxHash(null);
-
+      
       // 1. Check Prerequisites
-      if (!walletClient || !publicClient || !contractAddress || !config) {
+      if (!publicClient || !contractAddress || !config) {
         const missing = [
-          !walletClient && 'WalletClient',
           !publicClient && 'PublicClient',
           !contractAddress && 'contractAddress',
           !config && 'Wagmi Config',
@@ -39,8 +38,8 @@ export function useMintVeHSK() {
       }
 
       // 2. Check and Switch Chain if Necessary
-      if (walletClient.chain.id !== chainId) {
-        console.log(`Chain mismatch: Wallet is on ${walletClient.chain.id}, need ${chainId}. Attempting to switch...`);
+      if (publicClient.chain.id !== chainId) {
+        console.log(`Chain mismatch: Wallet is on ${publicClient.chain.id}, need ${chainId}. Attempting to switch...`);
         if (!switchChainAsync) {
           throw new Error('Switch chain function not available.');
         }
@@ -94,7 +93,11 @@ export function useMintVeHSK() {
     txHash,
   };
 }
-
+// 0xCC488872237c7682f7c4211Dda7f687695701c68 184089
+// 0xcAbA40D6D806A617bD65d16CE330ffABc9c16D75 9917
+// 0x3C4A794213C2f300eB79383693DBf0429C680360 1235
+// 0x20CE63aC14Da383d69150A4BfE36389d5E17A78E 36
+// 0x761F68e5b50e1cc6771234c0E3a3ED4a9E78037E 38
 export function useMintableAmount() {
   const { address } = useAccount();
   const chainId = useChainId();
@@ -125,9 +128,9 @@ export function useMintableAmount() {
           address: contractAddress as `0x${string}`,
           abi: VeHSKABI,
           functionName: 'getMintableAmount',
+          // args: ["0x761F68e5b50e1cc6771234c0E3a3ED4a9E78037E"],
           args: [address],
         }) as [bigint, bigint, bigint, bigint, bigint];
-        
         setData({
           mintableAmount: {
             mintableTotal: mintableInfo[0],
@@ -139,6 +142,7 @@ export function useMintableAmount() {
           isLoading: false,
           error: null,
         });
+
       } catch (error) {
         console.error('获取可铸造数量失败:', error);
         setData(prev => ({

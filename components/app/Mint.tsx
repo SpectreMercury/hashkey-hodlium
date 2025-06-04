@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useMintVeHSK } from '@/hooks/useMintVeHSK'; // Import the hook
+import { formatBigInt } from '@/utils/format';
 
-export default function Mint() {
+export default function Mint({mintAmount}: {mintAmount: bigint}) {
   const { mintVeHSK, isPending, isConfirming, error } = useMintVeHSK();
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -26,7 +27,7 @@ export default function Mint() {
   };
 
   const isLoading = isPending || isConfirming;
-  const buttonText = isLoading ? (isConfirming ? 'Confirming...' : 'Minting...') : 'Mint veHSK';
+  const buttonText = isLoading ? (isConfirming ? 'Confirming...' : 'Minting...') : `Mint veHSK ${formatBigInt(mintAmount)} veHSK`;
 
   return (
     <>
