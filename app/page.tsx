@@ -13,8 +13,8 @@ import axios from 'axios';
 import Image from 'next/image';
 import AddressBar from '@/components/AddressBar';
 import StartStake from '@/components/app/StartStake';
-import Mint from '@/components/app/Mint';
-import { useMintableAmount } from '@/hooks/useMintVeHSK'; // 导入 useMintableAmount hook
+import ClaimVehsk from '@/components/app/ClaimVehsk';
+// import { useMintableAmount } from '@/hooks/useMintVeHSK'; // 导入 useMintableAmount hook
 
 export default function Home() {
   // 添加本地loading状态，初始为true
@@ -32,7 +32,7 @@ export default function Home() {
   const [isLaunched, setIsLaunched] = useState(false);
   const [isAppEnabled, setIsAppEnabled] = useState(false);
   const [aprDataSource, setAprDataSource] = useState<'contract' | 'loading'>('loading');
-  const { mintableAmount, isLoading: isMintableAmountLoading } = useMintableAmount(); // 获取可铸造数量信息
+  // const { mintableAmount, isLoading: isMintableAmountLoading } = useMintableAmount(); // 获取可铸造数量信息
   
   // 结合API加载状态和初始加载状态
   const isLoadingCombined = initialLoading || apiLoading || aprsLoading;
@@ -350,7 +350,7 @@ export default function Home() {
             <div className="flex justify-center items-center gap-10 mt-10">
               {/* Call to action button */}
               <StartStake />
-              {mintableAmount && mintableAmount.mintableTotal > 0 && <Mint mintAmount={mintableAmount.mintableTotal} />}
+              <ClaimVehsk />
             </div>
             
             {/* AddressBar component placed here */}
