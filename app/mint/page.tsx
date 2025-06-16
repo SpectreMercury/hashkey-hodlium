@@ -102,7 +102,7 @@ export default function MintPage() {
             {/* Claimable Amount Display with Celebration Animation */}
             <div className={`relative bg-slate-800/30 backdrop-blur-sm rounded-2xl border border-slate-700/50 p-8 mb-8 overflow-hidden ${hasClaimableAmount ? 'celebration-container' : ''}`}>
               {/* Celebration Animation - Only show when there's claimable amount */}
-              {hasClaimableAmount && (
+              {!!hasClaimableAmount && (
                 <>
                   {/* Left side celebration stripes */}
                   <div className="celebration-stripes celebration-stripes-left">
