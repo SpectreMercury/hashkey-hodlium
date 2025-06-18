@@ -15,6 +15,8 @@ import AddressBar from '@/components/AddressBar';
 import StartStake from '@/components/app/StartStake';
 import UnstakeExporterComponent from '@/components/UnstakeReward';
 
+import { useProcessAndDownloadStakes } from '@/hooks/useProcessAndDownloadStakes'; // Adjust path as needed
+
 export default function Home() {
   // 添加本地loading状态，初始为true
   const [initialLoading, setInitialLoading] = useState(true);
@@ -46,6 +48,15 @@ export default function Home() {
     console.log('App enabled from env:', appEnabled);
   }, []);
 
+  const { processAndDownload,processedData } = useProcessAndDownloadStakes();
+  const handleProcessAndDownload = () => {
+    // You can optionally pass a different list of stakes or filename
+    // processAndDownload(customStakeList, 'custom-filename.json');
+    processAndDownload();
+    setTimeout(() => {
+      console.log(processedData, 'processedData');
+    }, 2000);
+  };
   // 获取服务器时间并检查是否已经发布
   useEffect(() => {
     const fetchServerTime = async () => {
@@ -303,6 +314,8 @@ export default function Home() {
             {/* Call to action button */}
             <StartStake />
             <UnstakeExporterComponent />
+
+            <button onClick={handleProcessAndDownload}>处理已有数据</button>
             {/* <div className="mt-10">
               <Link 
                 href="/stake" 

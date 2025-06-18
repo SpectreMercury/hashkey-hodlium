@@ -1,0 +1,99 @@
+
+{
+  "2025-01": {
+    "startBlock": 671202,
+    "endBlock": 2010407
+  },
+  "2025-02": {
+    "startBlock": 2010408,
+    "endBlock": 3219996
+  },
+  "2025-03": {
+    "startBlock": 3219997,
+    "endBlock": 4559201
+  },
+  "2025-04": {
+    "startBlock": 4559202,
+    "endBlock": 5855184
+  },
+  "2025-05": {
+    "startBlock": 5855185,
+    "endBlock": 7194391
+  },
+  "2025-06": {
+    "startBlock": 7194392,
+    "endBlock": 8490391
+  },
+  "2025-07": {
+    "startBlock": 8490392,
+    "endBlock": 9829591
+  },
+  "2025-08": {
+    "startBlock": 9829592,
+    "endBlock": 11168791
+  },
+  "2025-09": {
+    "startBlock": 11168792,
+    "endBlock": 12464791
+  },
+  "2025-10": {
+    "startBlock": 12464792,
+    "endBlock": 13803991
+  },
+  "2025-11": {
+    "startBlock": 13803992,
+    "endBlock": 15099991
+  },
+  "2025-12": {
+    "startBlock": 15099992,
+    "endBlock": 16439191
+  },
+  "2026-01": {
+    "startBlock": 16439192,
+    "endBlock": 17778391
+  },
+  "2026-02": {
+    "startBlock": 17778392,
+    "endBlock": 18987991
+  },
+  "2026-03": {
+    "startBlock": 18987992,
+    "endBlock": 20327191
+  },
+  "2026-04": {
+    "startBlock": 20327192,
+    "endBlock": 21623191
+  },
+  "2026-05": {
+    "startBlock": 21623192,
+    "endBlock": 22962391
+  },
+  "2026-06": {
+    "startBlock": 22962392,
+    "endBlock": 24258391
+  },
+  "2026-07": {
+    "startBlock": 24258392,
+    "endBlock": 25597591
+  },
+  "2026-08": {
+    "startBlock": 25597592,
+    "endBlock": 26936791
+  },
+  "2026-09": {
+    "startBlock": 26936792,
+    "endBlock": 28232791
+  },
+  "2026-10": {
+    "startBlock": 28232792,
+    "endBlock": 29571991
+  },
+  "2026-11": {
+    "startBlock": 29571992,
+    "endBlock": 30867991
+  },
+  "2026-12": {
+    "startBlock": 30867992,
+    "endBlock": 32207191
+  }
+}

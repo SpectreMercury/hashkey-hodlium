@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useContractEvents } from '@/hooks/useContractEvents';
+import { useContractEvents } from '@/hooks/useContractEventsAll';
 import { formatEther } from 'viem';
 import { useAccount } from 'wagmi';
 
