@@ -20,7 +20,7 @@ export default function Home() {
   const [simulatedAmount, setSimulatedAmount] = useState('1000');
   const [debouncedAmount, setDebouncedAmount] = useState(simulatedAmount);
   const { address: _address, isConnected } = useAccount();
-  const { totalStaked, stakingStats, exchangeRate, isLoading: apiLoading } = useStakingInfo(debouncedAmount);
+  const { totalStaked, stakingStats, exchangeRate, isLoading: apiLoading, maxStakePool } = useStakingInfo(debouncedAmount);
   const { totalStaked: oldTotalStaked, isLoading: oldApiLoading } = useOldStakingInfo(debouncedAmount);
   const { estimatedAPRs, maxAPRs, isLoading: aprsLoading } = useAllStakingAPRs(debouncedAmount);
   const router = useRouter();
@@ -345,30 +345,33 @@ export default function Home() {
               )}
             </div>
 
-            <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-slate-700/50 transition-all hover:border-primary/30 hover:bg-slate-800/80">
-              <div className="flex items-center gap-2 mb-4">
-                <svg className="w-6 h-6 text-primary/70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 12a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4m0 0l-2-2m2 2l2-2" />
-                  <circle cx="8" cy="14" r="1" strokeWidth={1.5} />
-                  <circle cx="12" cy="14" r="1" strokeWidth={1.5} />
-                  <circle cx="16" cy="14" r="1" strokeWidth={1.5} />
-                </svg>
-                <h3 className="text-sm font-medium text-slate-300">Total Max Staked Pool</h3>
+            {/* Total Max Staked Pool Card - Conditionally Rendered */}
+            {!isLoadingCombined && maxStakePool > BigInt(0) && (
+              <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-slate-700/50 transition-all hover:border-primary/30 hover:bg-slate-800/80">
+                <div className="flex items-center gap-2 mb-4">
+                  <svg className="w-6 h-6 text-primary/70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 12a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4m0 0l-2-2m2 2l2-2" />
+                    <circle cx="8" cy="14" r="1" strokeWidth={1.5} />
+                    <circle cx="12" cy="14" r="1" strokeWidth={1.5} />
+                    <circle cx="16" cy="14" r="1" strokeWidth={1.5} />
+                  </svg>
+                  <h3 className="text-sm font-medium text-slate-300">Total Max Staked Pool</h3>
+                </div>
+                {isLoadingCombined ? (
+                  <div className="animate-pulse">
+                    <div className="h-8 bg-slate-700 rounded w-32"></div>
+                  </div>
+                ) : (
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-3xl font-light tracking-tight text-white">
+                      {formatBigInt(maxStakePool)}
+                    </span>
+                    <span className="text-lg font-light text-slate-400">HSK</span>
+                  </div>
+                )}
               </div>
-              {isLoadingCombined ? (
-                <div className="animate-pulse">
-                  <div className="h-8 bg-slate-700 rounded w-32"></div>
-                </div>
-              ) : (
-                <div className="flex items-baseline gap-2">
-                  <span className="text-3xl font-light tracking-tight text-white">
-                    {"15000000"}
-                  </span>
-                  <span className="text-lg font-light text-slate-400">HSK</span>
-                </div>
-              )}
-            </div>
+            )}
 
             {/* Exchange Rate Card */}
             {/* <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-slate-700/50 transition-all hover:border-primary/30 hover:bg-slate-800/80">

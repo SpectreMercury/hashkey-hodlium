@@ -29,6 +29,7 @@ export function useStakingInfo(simulatedAmount: string = '1000') {
     stakingStats: StakingStats | null;
     exchangeRate: bigint;
     minStakeAmount: bigint;
+    maxStakePool: bigint;
     isLoading: boolean;
   }>({
     totalStaked: BigInt(0),
@@ -36,6 +37,7 @@ export function useStakingInfo(simulatedAmount: string = '1000') {
     exchangeRate: BigInt(0),
     minStakeAmount: BigInt(0),
     isLoading: true,
+    maxStakePool: BigInt(0),
   });
   
   useEffect(() => {
@@ -76,11 +78,19 @@ export function useStakingInfo(simulatedAmount: string = '1000') {
           functionName: 'minStakeAmount',
         });
         
+        // 获取最大质押池大小
+        const maxStakePool = await publicClient.readContract({
+          address: contractAddress as `0x${string}`,
+          abi: HashKeyChainStakingABI,
+          functionName: 'maxStakePool',
+        });
+        
         setData({
           totalStaked: totalValueLocked as bigint,
           stakingStats: detailedStakingStats as StakingStats,
           exchangeRate: currentExchangeRate as bigint,
           minStakeAmount: minStakeAmount as bigint,
+          maxStakePool: maxStakePool as bigint,
           isLoading: false,
         });
         
@@ -88,7 +98,8 @@ export function useStakingInfo(simulatedAmount: string = '1000') {
           totalValueLocked,
           detailedStakingStats,
           currentExchangeRate,
-          minStakeAmount
+          minStakeAmount,
+          maxStakePool
         });
       } catch (error) {
         console.error('Failed to fetch staking info:', error);
