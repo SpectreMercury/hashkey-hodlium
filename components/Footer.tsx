@@ -11,7 +11,7 @@ export default function Footer() {
             </div>
             <div className="flex gap-6">
               <Link 
-                href="https://x.com/HashKeyHSK" 
+                href="https://x.com/HSKChain" 
                 target="_blank"
                 className="text-white hover:text-primary flex items-center gap-2"
               >
