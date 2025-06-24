@@ -449,22 +449,23 @@ export default function PortfolioPage() {
       {showUnstakeModal && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-slate-800 border border-slate-700 rounded-xl p-6 max-w-md w-full">
-            <h3 className="text-xl font-medium text-white mb-4">Early Unstake Warning</h3>
+            <h3 className="text-xl font-medium text-white mb-4">Early Unstake Confirmation</h3>
             <div className="mb-6">
               <div className="flex items-start mb-4">
                 <svg className="w-6 h-6 text-yellow-500 mr-2 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
                 <p className="text-white">
-                  You are unstaking before the lock period ends. This will result in a penalty and you will not receive the full rewards.
+                  You are unstaking before the lock period ends. Your principal is safe, but you will forfeit a portion of the rewards.
+                  {/* You are unstaking before the lock period ends. This will result in a penalty and you will not receive the full rewards. */}
                 </p>
               </div>
               <div className="bg-yellow-500/20 border border-yellow-500/40 rounded-lg p-4 text-sm text-yellow-200">
-                <p className="font-medium mb-2">Penalty details:</p>
+                <p className="font-medium mb-2">Please note:</p>
                 <ul className="list-disc list-inside space-y-1">
-                  <li>Your original principal will be returned</li>
-                  <li>A portion of your earned rewards will be forfeited</li>
-                  <li>The specific penalty depends on how early you unstake</li>
+                  <li>Your original principal will be returned in full.</li>
+                  <li>A portion of your earned rewards will be forfeited.</li>
+                  <li>The amount of forfeited rewards depends on the remaining lock time.</li>
                 </ul>
               </div>
             </div>
