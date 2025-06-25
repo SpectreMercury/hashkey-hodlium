@@ -272,7 +272,7 @@ export default function Home() {
     );
   }
   
-  // 未发布或应用未启用：显示倒计时
+  // // 未发布或应用未启用：显示倒计时
   // if (!isLaunched || !isAppEnabled) {
   //   // 显示不同的消息，取决于是时间未到还是应用未启用
   //   const message = "Launching on March 3, 2025 20:00 UTC+8"
@@ -499,10 +499,10 @@ export default function Home() {
                     )}
                   </div> */}
                   
-                  <div className="flex justify-between items-center">
+                  {/* <div className="flex justify-between items-center">
                     <span className="text-slate-400 ">Max APY</span>
                     <span className="text-cyan-400 font-medium text-xl">{option.maxApr.toFixed(2)}%</span>
-                  </div>
+                  </div> */}
                 </div>
                 
                 <div className="p-6 border-t border-slate-700/50">
