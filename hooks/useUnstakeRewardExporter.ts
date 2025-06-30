@@ -28,21 +28,21 @@ interface FlexibleStakeInfo {
 // Data structure for the Locked Unstake Excel export
 interface FormattedExportData {
     User: string;
-    'HSK Amount': string; // Formatted
+    'HSK Amount': number;
     'Stake ID': string;
     'Block Number': string;
     'Transaction Hash': string;
-    Reward: string; // Formatted
+    Reward: number;
 }
 
 // Data structure for the Flexible Unstake Request Excel export
 interface FormattedFlexibleExportData {
     User: string;
-    'HSK Amount': string; // Formatted (Original staked amount)
+    'HSK Amount': number; // Formatted (Original staked amount)
     'Stake ID': string;
     'Request Block Number': string; // Block number when request was made (from event)
     'Transaction Hash': string; // Hash of the request transaction (from event)
-    'Calculated Reward': string; // Formatted (currentHskValue - hskAmount)
+    'Calculated Reward': number; // Formatted (currentHskValue - hskAmount)
     'Claimable Block': string; // Block number when funds can be claimed (from contract call)
 }
 
@@ -196,11 +196,11 @@ export function useUnstakeRewardExporter(unstakeEvents: UnstakeEvent[], requestU
                 // 3. Prepare data for Locked Unstake Excel export
                 const lockedDataToExport: FormattedExportData[] = eventsWithRewards.map(event => ({
                     'User': event.user,
-                    'HSK Amount': formatEther(event.hskAmount), // Apply formatting
+                    'HSK Amount': Number(formatEther(event.hskAmount)), // Apply formatting
                     'Stake ID': event.stakeId.toString(),
                     'Block Number': event.blockNumber.toString(),
                     'Transaction Hash': event.transactionHash,
-                    'Reward': formatEther(event.reward ?? 0n), // Apply formatting
+                    'Reward': Number(formatEther(event.reward ?? 0n)), // Apply formatting
                 }));
                 console.log("Formatted locked data prepared for export:", lockedDataToExport.length, "rows");
 
@@ -209,11 +209,11 @@ export function useUnstakeRewardExporter(unstakeEvents: UnstakeEvent[], requestU
                     .filter(event => event.info !== null) // Filter out events where fetch failed
                     .map(event => ({
                         'User': event.user,
-                        'HSK Amount': formatEther(event.info!.hskAmount), // Original staked amount
+                        'HSK Amount': Number(formatEther(event.info!.hskAmount)), // Original staked amount
                         'Stake ID': event.stakeId.toString(),
                         'Request Block Number': event.blockNumber.toString(), // From the event log
                         'Transaction Hash': event.transactionHash, // From the event log
-                        'Calculated Reward': formatEther(event.info!.reward ?? 0n), // Calculated reward
+                        'Calculated Reward': Number(formatEther(event.info!.reward ?? 0n)), // Calculated reward
                         'Claimable Block': event.info!.claimableBlock.toString(), // From contract call
                     }));
                 console.log("Formatted flexible data prepared for export:", flexibleDataToExport.length, "rows");

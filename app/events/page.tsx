@@ -5,7 +5,7 @@ import ContractEventsHistory from '@/components/ContractEventsHistory';
 
 export default function EventsPage() {
   const [showOnlyUserEvents, setShowOnlyUserEvents] = useState(false);
-  const [fromBlock, setFromBlock] = useState<string>('5882600');
+  const [fromBlock, setFromBlock] = useState<string>('8459347');
   const [toBlock, setToBlock] = useState<string>('latest');
   const [isSearching, setIsSearching] = useState(false);
   const [searchParams, setSearchParams] = useState<{
@@ -13,7 +13,7 @@ export default function EventsPage() {
     toBlock: bigint | 'latest';
     showOnlyUserEvents: boolean;
   }>({
-    fromBlock: 5882600n,
+    fromBlock: 8459347n,
     toBlock: 'latest',
     showOnlyUserEvents: false
   });
