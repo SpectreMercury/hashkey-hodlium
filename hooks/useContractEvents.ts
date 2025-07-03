@@ -34,6 +34,22 @@ export interface RequestUnstakeFlexibleEvent {
   logIndex: number;
 }
 
+export interface RewardsAddedEvent {
+  amount: bigint;
+  from: `0x${string}`;
+  blockNumber: bigint;
+  transactionHash: `0x${string}`;
+  logIndex: number;
+}
+
+export interface EmergencyWithdrawEvent {
+  user: `0x${string}`;
+  sharesAmount: bigint;
+  hskAmount: bigint;
+  blockNumber: bigint;
+  transactionHash: `0x${string}`;
+  logIndex: number;
+}
 
 interface UnstakeLog extends Log {
   args: {
@@ -52,6 +68,21 @@ interface RequestUnstakeFlexibleLog extends Log {
     stakeId: bigint;
     hskAmount: bigint;
     claimableBlock: bigint;
+  };
+}
+
+interface RewardsAddedLog extends Log {
+  args: {
+    amount: bigint;
+    from: `0x${string}`;
+  };
+}
+
+interface EmergencyWithdrawLog extends Log {
+  args: {
+    user: `0x${string}`;
+    sharesAmount: bigint;
+    hskAmount: bigint;
   };
 }
 
@@ -96,6 +127,8 @@ export function useContractEvents(
   // Only keep state for UnstakeEvents
   const [unstakeEvents, setUnstakeEvents] = useState<UnstakeEvent[]>([]);
   const [requestUnstakeFlexibleEvents, setRequestUnstakeFlexibleEvents] = useState<RequestUnstakeFlexibleEvent[]>([]);
+  const [rewardsAddedEvents, setRewardsAddedEvents] = useState<RewardsAddedEvent[]>([]);
+  const [emergencyWithdrawEvents, setEmergencyWithdrawEvents] = useState<EmergencyWithdrawEvent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -121,13 +154,16 @@ export function useContractEvents(
         }
 
         // Define event filters
-        // Only need Unstake event
         const unstakeEventSignature = parseAbiItem('event Unstake(address indexed user, uint256 sharesAmount, uint256 hskAmount, bool isEarlyWithdrawal, uint256 penalty, uint256 stakeId)');
         const requestUnstakeFlexibleEventSignature = parseAbiItem('event RequestUnstakeFlexible(address indexed user, uint256 indexed stakeId, uint256 hskAmount, uint256 claimableBlock)');
+        const rewardsAddedEventSignature = parseAbiItem('event RewardsAdded(uint256 amount, address indexed from)');
+        const emergencyWithdrawEventSignature = parseAbiItem('event EmergencyWithdraw(address indexed user, uint256 sharesAmount, uint256 hskAmount)');
 
         // Prepare arrays to collect all events
         const allUnstakeEvents: UnstakeEvent[] = [];
         const allRequestUnstakeFlexibleEvents: RequestUnstakeFlexibleEvent[] = [];
+        const allRewardsAddedEvents: RewardsAddedEvent[] = [];
+        const allEmergencyWithdrawEvents: EmergencyWithdrawEvent[] = [];
 
         // Fetch events in chunks
         let currentFromBlock = fromBlock;
@@ -156,25 +192,43 @@ export function useContractEvents(
             // args: userAddress ? { user: userAddress, stakeId: /* your stakeId filter */ } : { stakeId: /* your stakeId filter */ },
           };
 
+          const rewardsAddedEventFilter = {
+            address: contractAddress,
+            event: rewardsAddedEventSignature,
+            fromBlock: currentFromBlock,
+            toBlock: chunkToBlock,
+            args: userAddress ? { from: userAddress } : undefined,
+          };
+
+          const emergencyWithdrawEventFilter = {
+            address: contractAddress,
+            event: emergencyWithdrawEventSignature,
+            fromBlock: currentFromBlock,
+            toBlock: chunkToBlock,
+            args: userAddress ? { user: userAddress } : undefined,
+          };
+
           try {
-            // Fetch logs for both events concurrently
-            const [unstakeLogsResult, requestUnstakeFlexibleLogsResult] = await Promise.all([
+            // Fetch logs for all events concurrently
+            const [unstakeLogsResult, requestUnstakeFlexibleLogsResult, rewardsAddedLogsResult, emergencyWithdrawLogsResult] = await Promise.all([
               publicClient.getLogs(unstakeEventFilter),
               publicClient.getLogs(requestUnstakeFlexibleEventFilter),
+              publicClient.getLogs(rewardsAddedEventFilter),
+              publicClient.getLogs(emergencyWithdrawEventFilter),
             ]);
             
             const processedUnstakeEvents = unstakeLogsResult.map(log => {
               const typedLog = log as unknown as UnstakeLog;
               return {
                 user: typedLog.args.user,
-                // sharesAmount: typedLog.args.sharesAmount,
+                sharesAmount: typedLog.args.sharesAmount,
                 hskAmount: typedLog.args.hskAmount,
-                // isEarlyWithdrawal: typedLog.args.isEarlyWithdrawal,
-                // penalty: typedLog.args.penalty,
+                isEarlyWithdrawal: typedLog.args.isEarlyWithdrawal,
+                penalty: typedLog.args.penalty,
                 stakeId: typedLog.args.stakeId,
                 blockNumber: typedLog.blockNumber ?? 0n,
                 transactionHash: typedLog.transactionHash ?? '0x0' as `0x${string}`,
-                // logIndex: typedLog.logIndex ?? 0,
+                logIndex: typedLog.logIndex ?? 0,
               };
             });
             console.log(`Fetched ${processedUnstakeEvents.length} Unstake events in this chunk.`);
@@ -185,17 +239,47 @@ export function useContractEvents(
                 user: typedLog.args.user,
                 stakeId: typedLog.args.stakeId,
                 hskAmount: typedLog.args.hskAmount,
-                // claimableBlock: typedLog.args.claimableBlock,
+                claimableBlock: typedLog.args.claimableBlock,
                 blockNumber: typedLog.blockNumber ?? 0n,
                 transactionHash: typedLog.transactionHash ?? '0x0' as `0x${string}`,
-                // logIndex: typedLog.logIndex ?? 0,
+                logIndex: typedLog.logIndex ?? 0,
               };
             });
             console.log(`Fetched ${processedRequestUnstakeFlexibleEvents.length} RequestUnstakeFlexible events in this chunk.`);
 
+            const processedRewardsAddedEvents = rewardsAddedLogsResult.map(log => {
+              const typedLog = log as unknown as RewardsAddedLog;
+              return {
+                amount: typedLog.args.amount,
+                from: typedLog.args.from,
+                blockNumber: typedLog.blockNumber ?? 0n,
+                transactionHash: typedLog.transactionHash ?? '0x0' as `0x${string}`,
+                logIndex: typedLog.logIndex ?? 0,
+              };
+            });
+            console.log(`Fetched ${processedRewardsAddedEvents.length} RewardsAdded events in this chunk.`);
+
+            const processedEmergencyWithdrawEvents = emergencyWithdrawLogsResult.map(log => {
+              const typedLog = log as unknown as EmergencyWithdrawLog;
+              return {
+                user: typedLog.args.user,
+                sharesAmount: typedLog.args.sharesAmount,
+                hskAmount: typedLog.args.hskAmount,
+                blockNumber: typedLog.blockNumber ?? 0n,
+                transactionHash: typedLog.transactionHash ?? '0x0' as `0x${string}`,
+                logIndex: typedLog.logIndex ?? 0,
+              };
+            });
+            console.log(`Fetched ${processedEmergencyWithdrawEvents.length} EmergencyWithdraw events in this chunk.`);
+
             allUnstakeEvents.push(...processedUnstakeEvents);
             allRequestUnstakeFlexibleEvents.push(...processedRequestUnstakeFlexibleEvents);
+            allRewardsAddedEvents.push(...processedRewardsAddedEvents);
+            allEmergencyWithdrawEvents.push(...processedEmergencyWithdrawEvents);
             setUnstakeEvents(prev => [...prev, ...processedUnstakeEvents]);
+            setRequestUnstakeFlexibleEvents(prev => [...prev, ...processedRequestUnstakeFlexibleEvents]);
+            setRewardsAddedEvents(prev => [...prev, ...processedRewardsAddedEvents]);
+            setEmergencyWithdrawEvents(prev => [...prev, ...processedEmergencyWithdrawEvents]);
           } catch (chunkError) {
             console.error(`Error fetching events for block range ${currentFromBlock}-${chunkToBlock}:`, chunkError);
           }
@@ -206,10 +290,14 @@ export function useContractEvents(
         // Sort events by block number (newest first)
         allUnstakeEvents.sort((a, b) => Number(b.blockNumber - a.blockNumber));
         allRequestUnstakeFlexibleEvents.sort((a, b) => Number(b.blockNumber - a.blockNumber));
+        allRewardsAddedEvents.sort((a, b) => Number(b.blockNumber - a.blockNumber));
+        allEmergencyWithdrawEvents.sort((a, b) => Number(b.blockNumber - a.blockNumber));
 
         // Set all event states
         setUnstakeEvents(allUnstakeEvents);
         setRequestUnstakeFlexibleEvents(allRequestUnstakeFlexibleEvents);
+        setRewardsAddedEvents(allRewardsAddedEvents);
+        setEmergencyWithdrawEvents(allEmergencyWithdrawEvents);
 
         // Download the unstake events as JSON
         setTimeout(() => {
@@ -217,6 +305,10 @@ export function useContractEvents(
           downloadJson(allUnstakeEvents, `unstake-events-${fromBlock}-${resolvedToBlock}.json`);
           console.log(`Attempting to download ${allRequestUnstakeFlexibleEvents.length} RequestUnstakeFlexible events as JSON...`);
           downloadJson(allRequestUnstakeFlexibleEvents, `request-unstake-flexible-events-${fromBlock}-${resolvedToBlock}.json`);
+          console.log(`Attempting to download ${allRewardsAddedEvents.length} RewardsAdded events as JSON...`);
+          downloadJson(allRewardsAddedEvents, `rewards-added-events-${fromBlock}-${resolvedToBlock}.json`);
+          console.log(`Attempting to download ${allEmergencyWithdrawEvents.length} EmergencyWithdraw events as JSON...`);
+          downloadJson(allEmergencyWithdrawEvents, `emergency-withdraw-events-${fromBlock}-${resolvedToBlock}.json`);
         }, 1000);
 
         // Calculate total difference
@@ -230,9 +322,9 @@ export function useContractEvents(
     };
 
     fetchEvents();
-  }, [publicClient, contractAddress, fromBlock, toBlock, userAddress]);
+  }, [publicClient, contractAddress, fromBlock, toBlock, userAddress, rewardsAddedEvents]);
 
-  return { unstakeEvents, requestUnstakeFlexibleEvents, isLoading, error }; // Return relevant state
+  return { unstakeEvents, requestUnstakeFlexibleEvents, rewardsAddedEvents, emergencyWithdrawEvents, isLoading, error }; // Return relevant state
 }
 
 // Utility function to fetch contract events (unchanged)
@@ -264,12 +356,15 @@ export async function fetchContractEvents(
       resolvedToBlock = toBlock;
     }
 
-    // Only need Unstake event
     const unstakeEventSignature = parseAbiItem('event Unstake(address indexed user, uint256 sharesAmount, uint256 hskAmount, bool isEarlyWithdrawal, uint256 penalty, uint256 stakeId)');
     const requestUnstakeFlexibleEventSignature = parseAbiItem('event RequestUnstakeFlexible(address indexed user, uint256 indexed stakeId, uint256 hskAmount, uint256 claimableBlock)');
+    const rewardsAddedEventSignature = parseAbiItem('event RewardsAdded(uint256 amount, address indexed from)');
+    const emergencyWithdrawEventSignature = parseAbiItem('event EmergencyWithdraw(address indexed user, uint256 sharesAmount, uint256 hskAmount)');
 
     const allUnstakeEvents: UnstakeEvent[] = [];
     const allRequestUnstakeFlexibleEvents: RequestUnstakeFlexibleEvent[] = [];
+    const allRewardsAddedEvents: RewardsAddedEvent[] = [];
+    const allEmergencyWithdrawEvents: EmergencyWithdrawEvent[] = [];
 
     let currentFromBlock = fromBlock;
     while (currentFromBlock <= resolvedToBlock) {
@@ -296,11 +391,29 @@ export async function fetchContractEvents(
         // Note: Add stakeId filter if needed
       };
 
+      const rewardsAddedEventFilter = {
+        address: contractAddress,
+        event: rewardsAddedEventSignature,
+        fromBlock: currentFromBlock,
+        toBlock: chunkToBlock,
+        args: userAddress ? { from: userAddress } : undefined,
+      };
+
+      const emergencyWithdrawEventFilter = {
+        address: contractAddress,
+        event: emergencyWithdrawEventSignature,
+        fromBlock: currentFromBlock,
+        toBlock: chunkToBlock,
+        args: userAddress ? { user: userAddress } : undefined,
+      };
+
       try {
         // Fetch logs for both events concurrently
-        const [unstakeLogsResult, requestUnstakeFlexibleLogsResult] = await Promise.all([
+        const [unstakeLogsResult, requestUnstakeFlexibleLogsResult, rewardsAddedLogsResult, emergencyWithdrawLogsResult] = await Promise.all([
           publicClient.getLogs(unstakeEventFilter),
           publicClient.getLogs(requestUnstakeFlexibleEventFilter),
+          publicClient.getLogs(rewardsAddedEventFilter),
+          publicClient.getLogs(emergencyWithdrawEventFilter),
         ]);
         const processedUnstakeEvents = unstakeLogsResult.map((log) => {
           const typedLog = log as UnstakeLog; // Can be more specific now
@@ -330,8 +443,33 @@ export async function fetchContractEvents(
           };
         });
 
+        const processedRewardsAddedEvents = rewardsAddedLogsResult.map((log) => {
+          const typedLog = log as RewardsAddedLog;
+          return {
+            amount: typedLog.args.amount,
+            from: typedLog.args.from,
+            blockNumber: typedLog.blockNumber ?? 0n,
+            transactionHash: typedLog.transactionHash ?? '0x0' as `0x${string}`,
+            logIndex: typedLog.logIndex ?? 0,
+          };
+        });
+
+        const processedEmergencyWithdrawEvents = emergencyWithdrawLogsResult.map((log) => {
+          const typedLog = log as EmergencyWithdrawLog;
+          return {
+            user: typedLog.args.user,
+            sharesAmount: typedLog.args.sharesAmount,
+            hskAmount: typedLog.args.hskAmount,
+            blockNumber: typedLog.blockNumber ?? 0n,
+            transactionHash: typedLog.transactionHash ?? '0x0' as `0x${string}`,
+            logIndex: typedLog.logIndex ?? 0,
+          };
+        });
+
         allUnstakeEvents.push(...processedUnstakeEvents);
         allRequestUnstakeFlexibleEvents.push(...processedRequestUnstakeFlexibleEvents);
+        allRewardsAddedEvents.push(...processedRewardsAddedEvents);
+        allEmergencyWithdrawEvents.push(...processedEmergencyWithdrawEvents);
       } catch (chunkError) {
         console.error(`Error fetching events for block range ${currentFromBlock}-${chunkToBlock}:`, chunkError);
       }
@@ -341,8 +479,10 @@ export async function fetchContractEvents(
 
     allUnstakeEvents.sort((a, b) => Number(b.blockNumber - a.blockNumber));
     allRequestUnstakeFlexibleEvents.sort((a, b) => Number(b.blockNumber - a.blockNumber));
+    allRewardsAddedEvents.sort((a, b) => Number(b.blockNumber - a.blockNumber));
+    allEmergencyWithdrawEvents.sort((a, b) => Number(b.blockNumber - a.blockNumber));
 
-    return { unstakeEvents: allUnstakeEvents, requestUnstakeFlexibleEvents: allRequestUnstakeFlexibleEvents }; // Return both event types
+    return { unstakeEvents: allUnstakeEvents, requestUnstakeFlexibleEvents: allRequestUnstakeFlexibleEvents, rewardsAddedEvents: allRewardsAddedEvents, emergencyWithdrawEvents: allEmergencyWithdrawEvents }; // Return all event types
   } catch (err) {
     console.error('Error fetching contract events:', err);
     throw err;

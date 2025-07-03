@@ -124,31 +124,22 @@ export function useUnstakeRewardExporter(unstakeEvents: UnstakeEvent[], requestU
                 const rewardPromises = unstakeEvents.map(event =>
                     publicClient.readContract({
                         address: contractAddress,
-                        abi: HashKeyChainStakingABI, // Use the full ABI
-                        functionName: 'getLockedStakeInfo', // Correct function name
-                        args: [event.user, event.stakeId], // Pass user address and stakeId
-                        // args: ['0xB607073D513a0Cb3577dD2Af665e034b7A9a8360', 0], // Pass user address and stakeId
-                        
+                        abi: HashKeyChainStakingABI,
+                        functionName: 'getLockedStakeInfo',
+                        args: [event.user, event.stakeId],
                     }).then(stakeInfoResult => {
                         const stakeInfo = stakeInfoResult as [bigint, bigint, bigint, bigint, boolean, boolean];
-                        console.log(` event.hskAmount:`, event);
-                        console.log(`Fetched stake info for stakeId ${stakeInfo[1]}:`, stakeInfo);
-                        // Calculate reward: currentHskValue (index 2) - hskAmount (index 1)
-                        // 34692446971816367069440  这是取回的  金额
-
-                        // 
-                        const calculatedReward = event.hskAmount - stakeInfo[1]; // Adjusted for penalty
-                        console.log(`Fetched locked reward for stakeId ${event.stakeId}:`, calculatedReward);
-
+                        // reward = 实际领取 - 实际质押 (allow negative)
+                        const calculatedReward = event.hskAmount - stakeInfo[1];
                         return {
                             ...event,
-                            reward: calculatedReward >= 0n ? calculatedReward : 0n // Ensure reward is not negative
+                            reward: calculatedReward // allow negative
                         };
                     }).catch(fetchError => {
                         console.error(`Failed to fetch reward for stakeId ${event.stakeId}, user ${event.user}:`, fetchError);
                         return {
                             ...event,
-                            reward: null // Indicate error for this specific event
+                            reward: null
                         };
                     })
                 );
@@ -159,12 +150,12 @@ export function useUnstakeRewardExporter(unstakeEvents: UnstakeEvent[], requestU
                     publicClient.readContract({
                         address: contractAddress,
                         abi: HashKeyChainStakingABI,
-                        functionName: 'getFlexibleStakeInfo', // Use the correct function
+                        functionName: 'getFlexibleStakeInfo',
                         args: [event.user, event.stakeId],
                     }).then(flexibleInfoResult => {
                         const info = flexibleInfoResult as [bigint, bigint, bigint, bigint, bigint, boolean];
-                        const calculatedReward = info[2] - info[1]; // currentHskValue - hskAmount
-                        // console.log(`Fetched flexible info for stakeId ${event.stakeId}:`, info);
+                        // reward = 实际领取 - 实际质押 (allow negative)
+                        const calculatedReward = event.hskAmount - info[1];
                         return {
                             ...event,
                             info: {
@@ -174,14 +165,14 @@ export function useUnstakeRewardExporter(unstakeEvents: UnstakeEvent[], requestU
                                 requestBlock: info[3],
                                 claimableBlock: info[4],
                                 isWithdrawn: info[5],
-                                reward: calculatedReward >= 0n ? calculatedReward : 0n
+                                reward: calculatedReward // allow negative
                             }
                         };
                     }).catch(fetchError => {
                         console.error(`Failed to fetch flexible info for stakeId ${event.stakeId}, user ${event.user}:`, fetchError);
                         return {
                             ...event,
-                            info: null // Indicate error
+                            info: null
                         };
                     })
                 );
@@ -196,25 +187,26 @@ export function useUnstakeRewardExporter(unstakeEvents: UnstakeEvent[], requestU
                 // 3. Prepare data for Locked Unstake Excel export
                 const lockedDataToExport: FormattedExportData[] = eventsWithRewards.map(event => ({
                     'User': event.user,
-                    'HSK Amount': Number(formatEther(event.hskAmount)), // Apply formatting
+                    'HSK Amount': Number(formatEther(event.hskAmount)),
                     'Stake ID': event.stakeId.toString(),
                     'Block Number': event.blockNumber.toString(),
                     'Transaction Hash': event.transactionHash,
-                    'Reward': Number(formatEther(event.reward ?? 0n)), // Apply formatting
+                    'penalty' : Number(formatEther(event.penalty ?? 0n)),
+                    'Reward': Number(formatEther(event.reward ?? 0n)), // can be negative
                 }));
                 console.log("Formatted locked data prepared for export:", lockedDataToExport.length, "rows");
 
                 // 4. Prepare data for Flexible Unstake Request Excel export
                 const flexibleDataToExport: FormattedFlexibleExportData[] = flexibleEventsWithInfo
-                    .filter(event => event.info !== null) // Filter out events where fetch failed
+                    .filter(event => event.info !== null)
                     .map(event => ({
                         'User': event.user,
-                        'HSK Amount': Number(formatEther(event.info!.hskAmount)), // Original staked amount
+                        'HSK Amount': Number(formatEther(event.hskAmount)), // use event.hskAmount (实际领取)
                         'Stake ID': event.stakeId.toString(),
-                        'Request Block Number': event.blockNumber.toString(), // From the event log
-                        'Transaction Hash': event.transactionHash, // From the event log
-                        'Calculated Reward': Number(formatEther(event.info!.reward ?? 0n)), // Calculated reward
-                        'Claimable Block': event.info!.claimableBlock.toString(), // From contract call
+                        'Request Block Number': event.blockNumber.toString(),
+                        'Transaction Hash': event.transactionHash,
+                        'Calculated Reward': Number(formatEther(event.info!.reward ?? 0n)), // can be negative
+                        'Claimable Block': event.info!.claimableBlock.toString(),
                     }));
                 console.log("Formatted flexible data prepared for export:", flexibleDataToExport.length, "rows");
 
