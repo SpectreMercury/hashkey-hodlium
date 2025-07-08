@@ -13,6 +13,8 @@ import axios from 'axios';
 import Image from 'next/image';
 import AddressBar from '@/components/AddressBar';
 import StartStake from '@/components/app/StartStake';
+import ClaimVehsk from '@/components/app/ClaimVehsk';
+// import { useMintableAmount } from '@/hooks/useMintVeHSK'; // 导入 useMintableAmount hook
 
 export default function Home() {
   // 添加本地loading状态，初始为true
@@ -30,6 +32,7 @@ export default function Home() {
   const [isLaunched, setIsLaunched] = useState(false);
   const [isAppEnabled, setIsAppEnabled] = useState(false);
   const [aprDataSource, setAprDataSource] = useState<'contract' | 'loading'>('loading');
+  // const { mintableAmount, isLoading: isMintableAmountLoading } = useMintableAmount(); // 获取可铸造数量信息
   
   // 结合API加载状态和初始加载状态
   const isLoadingCombined = initialLoading || apiLoading || aprsLoading;
@@ -339,26 +342,16 @@ export default function Home() {
       <div className="min-h-screen text-white">
         {/* Hero Section */}
         <div className="container mx-auto px-4 pt-16 pb-8">
-        {/* <div className="container mx-auto px-4 pt-16 pb-24"> */}
           <div className="text-center mb-16">
             <h1 className="text-5xl font-light text-white mb-6 font-sora">HashKey Chain Staking</h1>
             <p className="text-xl text-slate-300 max-w-3xl mx-auto">
               Securely stake your HSK tokens and earn passive income with competitive APR
             </p>
-            
-            {/* Call to action button */}
-            <StartStake />
-            {/* <div className="mt-10">
-              <Link 
-                href="/stake" 
-                className="inline-flex items-center px-8 py-4 rounded-xl bg-primary/80 text-white hover:bg-primary transition-colors text-lg font-medium shadow-lg hover:shadow-xl"
-              >
-                Start Staking
-                <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
-              </Link>
-            </div> */}
+            <div className="flex justify-center items-center gap-10 mt-10">
+              {/* Call to action button */}
+              <StartStake />
+              <ClaimVehsk />
+            </div>
             
             {/* AddressBar component placed here */}
             <div className="mt-10 flex justify-center">

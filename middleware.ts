@@ -26,11 +26,11 @@ export function middleware(request: NextRequest) {
   }
   
   // 如果当前时间在发布时间之前或应用未启用，重定向到首页
-  if (now < launchTime || !isAppEnabled) {
-    console.log('Redirecting to home page');
-    const url = new URL('/', request.url);
-    return NextResponse.redirect(url);
-  }
+  // if (now < launchTime || !isAppEnabled) {
+  //   console.log('Redirecting to home page');
+  //   const url = new URL('/', request.url);
+  //   return NextResponse.redirect(url);
+  // }
   
   console.log('Allowing access to:', request.nextUrl.pathname);
   return NextResponse.next();
