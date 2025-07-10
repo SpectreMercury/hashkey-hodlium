@@ -12,6 +12,8 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import Image from 'next/image';
 import AddressBar from '@/components/AddressBar';
+import VeAddressBar from '@/components/AddressBar';
+
 import StartStake from '@/components/app/StartStake';
 import ClaimVehsk from '@/components/app/ClaimVehsk';
 // import { useMintableAmount } from '@/hooks/useMintVeHSK'; // 导入 useMintableAmount hook
@@ -354,10 +356,9 @@ export default function Home() {
             </div>
             
             {/* AddressBar component placed here */}
-            <div className="mt-10 flex justify-center">
-              <div className="w-full max-w-2xl">
-                <AddressBar />
-              </div>
+            <div className="mt-10 flex flex-col md:flex-row justify-center gap-10">
+              <AddressBar />
+              <VeAddressBar />
             </div>
           </div>
           

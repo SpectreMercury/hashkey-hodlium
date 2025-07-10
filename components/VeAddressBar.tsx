@@ -6,9 +6,9 @@ import { toast } from 'react-toastify';
 
 
 // mainnet stHSK address
-const stHSKAddress = '0xD2fdDFf28A534300ae961c5435E16f9465253b76';
+const veHSKAddress = '0xe1045155ee02e0997E6bB4509D854a306c50D914';
 
-export default function AddressBar() {
+export default function VeAddressBar() {
   const { watchAsset } = useWatchAsset();
   const { isConnected } = useAccount();
   const [copied, setCopied] = useState(false);
@@ -37,8 +37,8 @@ export default function AddressBar() {
     watchAsset({
       type: 'ERC20',
       options: {
-        address: stHSKAddress,
-        symbol: 'stHSK',
+        address: veHSKAddress,
+        symbol: 'veHSK',
         decimals: 18,
       },
     });
@@ -54,14 +54,14 @@ export default function AddressBar() {
             </svg>
           </div>
           <div className="text-left">
-            <h3 className="text-sm font-medium text-slate-300 mb-1">stHSK Token Address</h3>
-            <p className="text-xs text-slate-400 font-mono hidden md:block">{stHSKAddress}</p>
-            <p className="text-xs text-slate-400 font-mono md:hidden">{`${stHSKAddress.substring(0, 6)}...${stHSKAddress.substring(stHSKAddress.length - 6)}`}</p>
+            <h3 className="text-sm font-medium text-slate-300 mb-1">veHSK Token Address</h3>
+            <p className="text-xs text-slate-400 font-mono hidden md:block">{veHSKAddress}</p>
+            <p className="text-xs text-slate-400 font-mono md:hidden">{`${veHSKAddress.substring(0, 6)}...${veHSKAddress.substring(veHSKAddress.length - 6)}`}</p>
           </div>
         </div>
         
         <div className="flex items-center space-x-2 ml-8">
-          <CopyToClipboard text={stHSKAddress} onCopy={handleCopy}>
+          <CopyToClipboard text={veHSKAddress} onCopy={handleCopy}>
             <div className="relative group">
               <div className="p-1 rounded-md hover:bg-gray-700 transition-colors">
                 <Image
