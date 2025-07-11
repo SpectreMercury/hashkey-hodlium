@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import Image from 'next/image';
 import AddressBar from '@/components/AddressBar';
-import VeAddressBar from '@/components/AddressBar';
+import VeAddressBar from '@/components/VeAddressBar';
 
 import StartStake from '@/components/app/StartStake';
 import ClaimVehsk from '@/components/app/ClaimVehsk';
