@@ -21,7 +21,7 @@ export default function Footer() {
                 Twitter
               </Link>
               <Link 
-                href="https://discord.gg/b8KkHJsW" 
+                href="https://discord.gg/jGmGKcEy" 
                 target="_blank"
                 className="text-white hover:text-primary flex items-center gap-2"
               >
